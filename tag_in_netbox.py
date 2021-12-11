@@ -1,7 +1,19 @@
 import os
 import pynetbox
 import requests
-from textcolors import black, grey, red, green, chartreuse, blue, magenta, cyan, rainbow, color_menu, ColorWheel
+from textcolors import (
+    black,
+    grey,
+    red,
+    green,
+    chartreuse,
+    blue,
+    magenta,
+    cyan,
+    rainbow,
+    color_menu,
+    ColorWheel,
+)
 
 
 def csv_to_dict():
@@ -35,9 +47,11 @@ def csv_to_dict():
             if device_name not in device_tag_dict.keys():
                 device_tag_dict[device_name] = [device_tag]
             else:
-                device_tag_dict[device_name] = device_tag_dict[device_name].append(device_tag)
+                device_tag_dict[device_name] = device_tag_dict[device_name].append(
+                    device_tag
+                )
     print(f"\n{rainbow(device_tag_dict)}")
-    return(device_tag_dict)
+    return device_tag_dict
 
 
 def netbox_update_device_tags(device_dict):
@@ -45,18 +59,18 @@ def netbox_update_device_tags(device_dict):
     Modify tags of devices in NetBox.
     """
     try:
-        netbox_token = os.environ['NETBOX_TOKEN']
+        netbox_token = os.environ["NETBOX_TOKEN"]
     except:
         netbox_token = input("Please enter Netbox token: ")
 
     try:
-        cert_auth_bundle = os.environ['CERT_AUTH_BUNDLE']
+        cert_auth_bundle = os.environ["CERT_AUTH_BUNDLE"]
     except:
         cert_auth_bundle = input("Please enter Certificate Auth Bundle filepath: ")
-    
+
     color_object = ColorWheel()
     print("\n", color_object.arrows(), "\n")
-    
+
     requests_session_object = requests.Session()
     requests_session_object.verify = cert_auth_bundle
     netbox_api_object = pynetbox.api(
@@ -72,8 +86,8 @@ def netbox_update_device_tags(device_dict):
                 # # Uncomment to append a tag to a device's list of tags
                 # netbox_host.tags.append(device_tag)
 
-                # Add tag/s by concatenating/combining two lists 
-                # of tags using + (and then replace the old list 
+                # Add tag/s by concatenating/combining two lists
+                # of tags using + (and then replace the old list
                 # with the new combined list)
                 netbox_host.tags = netbox_host.tags + [device_tag]
 
@@ -89,9 +103,15 @@ def netbox_update_device_tags(device_dict):
                 netbox_host.save()
 
                 # Print confirmation (tag lists will be automatically deduplicated later in the process)
-                print(color_object.alternate(f'Tags for {device_name}: {netbox_host.tags}'))
+                print(
+                    color_object.alternate(
+                        f"Tags for {device_name}: {netbox_host.tags}"
+                    )
+                )
             except pynetbox.lib.query.RequestError as error_object:
-                print(f"{red('Netbox Error')} for {device_name} --> {error_object.error}")
+                print(
+                    f"{red('Netbox Error')} for {device_name} --> {error_object.error}"
+                )
     print("\n", color_object.arrows(), "\n")
 
 

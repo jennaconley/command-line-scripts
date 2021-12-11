@@ -1,5 +1,6 @@
 import logging
 
+
 def get_ip_list_from_csv(csv_filename):
     ip_list = []
     with open(csv_filename) as file_object:
@@ -8,11 +9,13 @@ def get_ip_list_from_csv(csv_filename):
             ip_trimmed = row.strip()
             # If the row is empty skip it and go on to the next.
             if len(ip_trimmed) < 1:
-                logging.info(f'No data found on line {row_number} (Note: line numbers are 0-indexed)')
+                logging.info(
+                    f"No data found on line {row_number} (Note: line numbers are 0-indexed)"
+                )
                 continue
-            logging.debug(f'Reading line {row_number}: {ip_trimmed}')
+            logging.debug(f"Reading line {row_number}: {ip_trimmed}")
             ip_list.append(ip_trimmed)
-    return(ip_list)
+    return ip_list
 
 
 def count_ips_from_csv(ip_list):
@@ -25,11 +28,11 @@ def count_ips_from_csv(ip_list):
     # Add 1 for each time an IP shows up in the list
     for ip_string in ip_list:
         ip_count_dict[ip_string] = ip_count_dict.get(ip_string, 0) + 1
-    return(ip_count_dict)
+    return ip_count_dict
 
 
 def select_count_value(ip_count_tuple):
-    return(ip_count_tuple[1])
+    return ip_count_tuple[1]
 
 
 def sort_dictionary_by_value(unsorted_dict):
@@ -40,11 +43,11 @@ def sort_dictionary_by_value(unsorted_dict):
     #
     #### Option 2: sorting with keys created by a function defined seperately (above)
     sorted_tuples_list = sorted(key_value_tuples_iterator, key=select_count_value)
-    
+
     sorted_ip_dict = {}
     for ip, count in sorted_tuples_list:
         sorted_ip_dict[ip] = count
-    return(sorted_ip_dict)
+    return sorted_ip_dict
 
 
 def main():
