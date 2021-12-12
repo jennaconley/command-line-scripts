@@ -1,6 +1,6 @@
 """
 Text formatting with colors!
-(Used in tag_in_netbox.py)
+(Developed for Python scripts run from a bash terminal on MacOS - not tested in other environments.)
 """
 
 color_dictionary = {
@@ -15,13 +15,10 @@ color_dictionary = {
 }
 
 for color, color_code in color_dictionary.items():
-    exec(
-        f"""
+    exec(f'''
 def {color}(text_string):
     return(f"\033[0;{color_code}m{{text_string}}\033[0m")
-    """
-    )
-
+    ''')
 
 def rainbow(input_to_be_formatted, color_dict=color_dictionary):
     color_list = list(color_dict.keys())
@@ -68,3 +65,9 @@ class ColorWheel:
         color_formatted_text = f"\033[0;{color_code}m{input_text}\033[0m"
         self.color_index = self.color_index + 1
         return color_formatted_text
+
+
+if __name__ == "__main__":
+    print(cyan("\nTesting colors . . ."))
+    color_object = ColorWheel()
+    print("\n", color_object.arrows(), "\n")
